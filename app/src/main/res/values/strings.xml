@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="welcome_message">Welcome to my app</string>
+    <string name="hello_first_fragment">Hello from the first fragment</string>
+    <string name="hello_second_fragment">Hello from the second fragment. Argument: %1$s</string>
+
+    <string name="dictionary">Dictionar</string>
+    <string name="play">Play</string>
+    <string name="replay">Replay</string>
+    <string name="deutsch">DEUTSCH</string>
+    <string name="native_lang">ROMANA</string>
+    <string name="hint_key">Tasteaza un cuvant</string>
+    <string name="hint_value">Tasteaza traducerea</string>
+    <string name="save">Salveaza</string>
+    <string name="discard">Anuleaza</string>
+    <string name="add">Adauga</string>
+    <string name="edit">Modifica</string>
+    <string name="delete">Sterge</string>
+    <string name="search">Cauta</string>
+    <string name="back">Inapoi</string>
+    <string name="words_number">Numar cuvinte:</string>
+    <string name="wrong_key_input">Cuvantul in limba engleza este prea scurt.</string>
+    <string name="wrong_val_input">Cuvantul in limba germana este prea scurt.</string>
+    <string name="entry_added">Cuvant adaugat.</string>
+    <string name="entry_deleted">Cuvant sters.</string>
+    <string name="error">Eroare</string>
+
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

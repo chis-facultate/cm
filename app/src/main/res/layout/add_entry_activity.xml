@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddEntryActivity">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/germania_one"
+        android:text="@string/native_lang"
+        android:textColor="@color/black"
+        android:textAppearance="?android:textAppearanceLarge" />
+    <EditText
+        android:id="@+id/id_et_key_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_key"
+        android:inputType="textPersonName"
+        android:textColor="@color/black" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/germania_one"
+        android:text="@string/deutsch"
+        android:textColor="@color/black"
+        android:textAppearance="?android:textAppearanceLarge" />
+    <EditText
+        android:id="@+id/id_et_value_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_value"
+        android:inputType="textMultiLine"
+        android:textColor="@color/black" />
+</LinearLayout>

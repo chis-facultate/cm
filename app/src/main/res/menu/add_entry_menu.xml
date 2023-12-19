@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/id_btn_save"
+        android:title="@string/save"
+        android:onClick="onButtonSaveClick"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/id_btn_discard"
+        android:title="@string/discard"
+        app:showAsAction="ifRoom"
+        android:onClick="onButtonDiscardClick"/>
+</menu>
