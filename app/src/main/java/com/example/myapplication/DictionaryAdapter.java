@@ -3,20 +3,24 @@ package com.example.myapplication;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 import java.util.Map;
 
 public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.ViewHolder> {
-    private List<Map.Entry<String, String>> itemList;
 
-    public DictionaryAdapter(List<Map.Entry<String, String>> itemList) {
-        this.itemList = itemList;
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
+
+    private List<Map.Entry<String, String>> itemList;
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
@@ -36,18 +40,34 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Vi
         return itemList.size();
     }
 
-    public List<Map.Entry<String, String>> getItemList(){ return itemList; }
+    public List<Map.Entry<String, String>> getItemList() {
+        return itemList;
+    }
 
-    public void setItemList(List<Map.Entry<String, String>> itemList){ this.itemList = itemList; }
+    public void setItemList(List<Map.Entry<String, String>> itemList) {
+        this.itemList = itemList;
+    }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    // ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textViewCheie;
         private final TextView textViewVal;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
             textViewCheie = itemView.findViewById(R.id.id_textView_cheie_item_layout);
             textViewVal = itemView.findViewById(R.id.id_textView_val_item_layout);
+
+            // Listener click
+            itemView.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                listener.onItemClick(position);
+            });
         }
 
         public void bind(Map.Entry<String, String> item) {

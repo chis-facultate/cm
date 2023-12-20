@@ -1,11 +1,13 @@
 package com.example.myapplication;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
+
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -13,15 +15,6 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class FragmentEntry extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public FragmentEntry() {
         // Required empty public constructor
@@ -31,27 +24,35 @@ public class FragmentEntry extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment FragmentSetari.
+     * @return A new instance of fragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static FragmentEntry newInstance() {
-        FragmentEntry fragment = new FragmentEntry();
-        return fragment;
+        return new FragmentEntry();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_entry, container, false);
+        View view = inflater.inflate(R.layout.fragment_layout, container, false);
+
+        // Access the data from the arguments bundle
+        Bundle args = getArguments();
+        if(args != null) {
+            String key = args.getString("key", "error");
+            String value = args.getString("value", "error");
+
+            TextView tvKey = view.findViewById(R.id.id_tv_key_fragment_layout);
+            TextView tvVal = view.findViewById(R.id.id_tv_val_fragment_layout);
+
+            tvKey.setText(key);
+            tvVal.setText(value);
+        }
+        return view;
     }
 }

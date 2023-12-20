@@ -12,7 +12,10 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -42,13 +45,65 @@ public class MainActivity extends AppCompatActivity {
         tvEntryCounter = findViewById(R.id.id_textView_nrCuv);
         tvEntryCounter.setText(String.valueOf(dictionary.size()));
 
+        // Recycler view adapter
+        adapter = new DictionaryAdapter();
+        adapter.setItemList(new ArrayList<>(dictionary.entrySet()));
+        adapter.setOnItemClickListener(position -> {
+            // Extrage intrarea care a fost apasata
+            Map.Entry<String, String> entry = adapter.getItemList().get(position);
+
+            // Paseaza datele catre fragment prin bundle
+            Bundle bundle = new Bundle();
+            bundle.putString("key", entry.getKey());
+            bundle.putString("value", entry.getValue());
+
+            FragmentEntry fragmentEntry = FragmentEntry.newInstance();
+            fragmentEntry.setArguments(bundle);
+
+            // display the fragment
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.id_fragment_container, fragmentEntry)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
         // Recycler view
         RecyclerView recyclerView = findViewById(R.id.id_recyclerView);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL));
-
-        adapter = new DictionaryAdapter(new ArrayList<>(dictionary.entrySet()));
         recyclerView.setAdapter(adapter);
+
+        // Listener swipe
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper
+                .SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+
+                Map.Entry<String, String> deletedEntry = adapter.getItemList().get(position);
+
+                // Sterge din fisier
+                SharedPreferences sharedPreferences = getSharedPreferences("DictionaryFile", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove(deletedEntry.getKey());
+                if(editor.commit()) {
+                    // Stergere din lista
+                    adapter.getItemList().remove(position);
+                    adapter.notifyItemRemoved(position);
+                    // Sterge din dictionar din memorie
+                    dictionary.remove(deletedEntry.getKey(), deletedEntry.getValue());
+                    // Actualizeaza counter
+                    tvEntryCounter.setText(String.valueOf(dictionary.size()));
+                }
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         //
         activityResultLauncherAddEntry = registerForActivityResult(
@@ -62,28 +117,24 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             String key = data.getStringExtra("NEW_KEY");
                             String value = data.getStringExtra("NEW_VALUE");
-
                             // Adauga in fisier
                             SharedPreferences sharedPreferences = getSharedPreferences("DictionaryFile", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString(key, value);
-
-                            // Apply the changes
                             if (editor.commit()) {
+                                // Adauga in lista
                                 List<Map.Entry<String, String>> itemList = adapter.getItemList();
                                 itemList.add(new AbstractMap.SimpleEntry<>(key, value));
                                 itemList.sort(Comparator.comparing(Map.Entry<String, String>::getKey));
-
                                 adapter.notifyDataSetChanged();
-
+                                // Adauga in dictionar
                                 dictionary.put(key, value);
-
+                                // Actualizeaza counter
                                 tvEntryCounter.setText(String.valueOf(dictionary.size()));
 
                                 Toast.makeText(this, R.string.entry_added,
                                         Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(this, R.string.error,
                                         Toast.LENGTH_SHORT).show();
                             }
@@ -104,13 +155,14 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String text) {
                 adapter.setItemList(new ArrayList<>(dictionary.entrySet()));
 
                 text = text.trim();
 
-                if (text.equals("")){
+                if (text.equals("")) {
                     adapter.notifyDataSetChanged();
                     return true;
                 }
@@ -153,5 +205,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return treeMap;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Check if there are fragments in the back stack
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            // Pop all fragments from the back stack at once
+            fragmentManager.popBackStackImmediate(null,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else {
+            // No fragments in the back stack, proceed with default behavior
+            super.onBackPressed();
+        }
     }
 }
