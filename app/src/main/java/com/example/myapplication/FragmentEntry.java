@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.adapter.PhoneticsAdapter;
 import com.example.myapplication.model.APIResponse;
 import com.example.myapplication.model.Phonetic;
 
@@ -66,7 +67,10 @@ public class FragmentEntry extends Fragment implements OnFetchDataListener {
             return;
         }
         // Afiseaza date obtinute
-        ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,
+        //ArrayAdapter adapter = new ArrayAdapter<>(getContext(), R.layout.list_view_item_layout,
+          //      apiResponse.getPhonetics());
+
+        PhoneticsAdapter adapter = new PhoneticsAdapter(getContext(), R.layout.list_view_item_layout,
                 apiResponse.getPhonetics());
 
         ListView listView = getView().findViewById(R.id.id_lv_phonetics);

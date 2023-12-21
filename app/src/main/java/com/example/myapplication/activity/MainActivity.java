@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.myapplication.DictionaryAdapter;
+import com.example.myapplication.adapter.DictionaryAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.FragmentEntry;
 
