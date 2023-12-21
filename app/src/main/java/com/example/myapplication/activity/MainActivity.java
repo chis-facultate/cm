@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,6 +18,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import com.example.myapplication.DictionaryAdapter;
+import com.example.myapplication.R;
+import com.example.myapplication.FragmentEntry;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
