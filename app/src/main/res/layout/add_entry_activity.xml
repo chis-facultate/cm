@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/germania_one"
-        android:text="@string/deutsch"
+        android:text="@string/english"
         android:textColor="@color/black"
         android:textAppearance="?android:textAppearanceLarge" />
     <EditText

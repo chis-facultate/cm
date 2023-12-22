@@ -4,6 +4,11 @@ public class Phonetic {
     private String text;
     private String audio;
 
+    public Phonetic() {
+        text = "";
+        audio = "";
+    }
+
     public String getText() {
         return text;
     }

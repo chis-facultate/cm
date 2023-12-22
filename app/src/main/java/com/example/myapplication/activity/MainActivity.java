@@ -2,7 +2,6 @@ package com.example.myapplication.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +18,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.myapplication.adapter.DictionaryAdapter;
-import com.example.myapplication.R;
+import com.example.myapplication.FileManager;
 import com.example.myapplication.FragmentEntry;
+import com.example.myapplication.R;
+import com.example.myapplication.adapter.DictionaryAdapter;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -39,12 +39,15 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> activityResultLauncherAddEntry;
     private TextView tvEntryCounter;
 
+    private FileManager fileManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        dictionary = readDictionaryFromFile();
+        fileManager = new FileManager("DictionaryFile", this);
+        dictionary = fileManager.readDictionaryFromFile();
 
         tvEntryCounter = findViewById(R.id.id_textView_nrCuv);
         tvEntryCounter.setText(String.valueOf(dictionary.size()));
@@ -93,10 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 Map.Entry<String, String> deletedEntry = adapter.getItemList().get(position);
 
                 // Sterge din fisier
-                SharedPreferences sharedPreferences = getSharedPreferences("DictionaryFile", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove(deletedEntry.getKey());
-                if(editor.commit()) {
+                if(fileManager.deleteEntryFromFile(deletedEntry.getKey())) {
                     // Stergere din lista
                     adapter.getItemList().remove(position);
                     adapter.notifyItemRemoved(position);
@@ -121,11 +121,9 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             String key = data.getStringExtra("NEW_KEY");
                             String value = data.getStringExtra("NEW_VALUE");
+
                             // Adauga in fisier
-                            SharedPreferences sharedPreferences = getSharedPreferences("DictionaryFile", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(key, value);
-                            if (editor.commit()) {
+                            if (fileManager.writeEntryInFile(key, value)) {
                                 // Adauga in lista
                                 List<Map.Entry<String, String>> itemList = adapter.getItemList();
                                 itemList.add(new AbstractMap.SimpleEntry<>(key, value));
@@ -195,20 +193,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddButtonClick(MenuItem menuItem) {
         activityResultLauncherAddEntry.launch(new Intent(this, AddEntryActivity.class));
-    }
-
-    private TreeMap<String, String> readDictionaryFromFile() {
-        SharedPreferences sharedPreferences = getSharedPreferences("DictionaryFile", MODE_PRIVATE);
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-
-        TreeMap<String, String> treeMap = new TreeMap<>();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue().toString();
-            treeMap.put(key, value);
-        }
-
-        return treeMap;
     }
 
     @Override

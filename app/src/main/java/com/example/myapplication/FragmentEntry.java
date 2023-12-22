@@ -67,9 +67,6 @@ public class FragmentEntry extends Fragment implements OnFetchDataListener {
             return;
         }
         // Afiseaza date obtinute
-        //ArrayAdapter adapter = new ArrayAdapter<>(getContext(), R.layout.list_view_item_layout,
-          //      apiResponse.getPhonetics());
-
         PhoneticsAdapter adapter = new PhoneticsAdapter(getContext(), R.layout.list_view_item_layout,
                 apiResponse.getPhonetics());
 
