@@ -1,24 +1,24 @@
 package com.example.myapplication;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.adapter.PhoneticsAdapter;
 import com.example.myapplication.model.APIResponse;
-import com.example.myapplication.model.Phonetic;
 
 public class FragmentEntry extends Fragment implements OnFetchDataListener {
 
     private String key;
     private String value;
+    private ObjectAnimator fadeIn;
 
     public FragmentEntry() {
         // Required empty public constructor
@@ -41,6 +41,7 @@ public class FragmentEntry extends Fragment implements OnFetchDataListener {
         key = args.getString("key", "error");
         value = args.getString("value", "error");
 
+        // La instantierea fragmentului se face call la API
         RequestManager requestManager = new RequestManager();
         requestManager.getWordData(this, value);
     }
@@ -57,25 +58,40 @@ public class FragmentEntry extends Fragment implements OnFetchDataListener {
         tvKey.setText(key);
         tvVal.setText(value);
 
+        // Animatie
+        TextView tvLoading = view.findViewById(R.id.id_tv_loading_fragment_layout);
+        tvLoading.setAlpha(0f);
+        fadeIn = ObjectAnimator.ofFloat(tvLoading, "alpha", 0f, 1f);
+        fadeIn.setDuration(1000);
+        fadeIn.setRepeatCount(ValueAnimator.INFINITE);
+        fadeIn.start();
+
         return view;
     }
 
     @Override
     public void onFetchData(APIResponse apiResponse) {
+        TextView tvLoad = getView().findViewById(R.id.id_tv_loading_fragment_layout);
         if (apiResponse == null) {
-            Toast.makeText(getContext(), "RESPONSE NOT SUCCESSFULL", Toast.LENGTH_SHORT).show();
-            return;
+            fadeIn.cancel();
+            tvLoad.setText(R.string.error);
         }
-        // Afiseaza date obtinute
-        PhoneticsAdapter adapter = new PhoneticsAdapter(getContext(), R.layout.list_view_item_layout,
-                apiResponse.getPhonetics());
+        else {
+            fadeIn.cancel();
+            tvLoad.setVisibility(View.GONE);
+            // Afiseaza date obtinute
+            PhoneticsAdapter adapter = new PhoneticsAdapter(getContext(), R.layout.list_view_item_layout,
+                    apiResponse.getPhonetics());
 
-        ListView listView = getView().findViewById(R.id.id_lv_phonetics);
-        listView.setAdapter(adapter);
+            ListView listView = getView().findViewById(R.id.id_lv_phonetics);
+            listView.setAdapter(adapter);
+        }
     }
 
     @Override
     public void onError() {
-        Toast.makeText(getContext(), "ERROR CALL", Toast.LENGTH_SHORT).show();
+        TextView tvLoad = getView().findViewById(R.id.id_tv_loading_fragment_layout);
+        fadeIn.cancel();
+        tvLoad.setText(R.string.error);
     }
 }

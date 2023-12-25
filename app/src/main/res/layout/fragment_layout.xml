@@ -33,6 +33,13 @@
             android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@color/black" />
 
+        <TextView
+            android:id="@+id/id_tv_loading_fragment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/loading"
+            android:textAppearance="?android:textAppearanceLarge"/>
+
             <ListView
                 android:id="@+id/id_lv_phonetics"
                 android:layout_width="match_parent"
