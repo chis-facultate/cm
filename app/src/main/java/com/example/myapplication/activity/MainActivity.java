@@ -3,8 +3,10 @@ package com.example.myapplication.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DictionaryAdapter adapter;
     private ActivityResultLauncher<Intent> activityResultLauncherAddEntry;
+    private ActivityResultLauncher<Intent> speechRecognitionLauncher;
     private TextView tvEntryCounter;
 
     private FileManager fileManager;
@@ -143,6 +146,23 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+         speechRecognitionLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data == null) {
+                            throw new AssertionError();
+                        } else {
+                            // EXTRA_RESULTS = cheia folosita pentru a extrage textul din intent
+                            ArrayList<String> extras = data
+                                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                            System.out.println("**" + extras.get(0));
+                        }
+                    }
+                }
+        );
     }
 
     @Override
@@ -201,11 +221,23 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0) {
             // Pop all fragments from the back stack at once
-            fragmentManager.popBackStackImmediate(null,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         } else {
             // No fragments in the back stack, proceed with default behavior
             super.onBackPressed();
         }
+    }
+
+    public void onMicButtonClick(View v) {
+        /*
+          RecognizerIntent = clasa ce contine constante folosite de intenturile necesare pentru
+                               lansarea activitatii de speech recognition
+          ACTION_RECOGNIZE_SPEECH = activitate predefinita pentru speech prompting
+          LANGUAGE_MODEL_FREE_FORM = constanta pentru alegerea unui model de uz general pentru
+          text to speech
+         */
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechRecognitionLauncher.launch(intent);
     }
 }
