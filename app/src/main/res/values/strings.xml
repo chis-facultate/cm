@@ -24,6 +24,7 @@
     <string name="words_number">Numar cuvinte:</string>
     <string name="wrong_key_input">Cuvantul in limba romana este prea scurt.</string>
     <string name="wrong_val_input">Cuvantul in limba engleza este prea scurt.</string>
+    <string name="key_exists">Cuvantul in limba romana exista deja in dictionar.</string>
     <string name="entry_added">Cuvant adaugat.</string>
     <string name="entry_deleted">Cuvant sters.</string>
     <string name="error">Eroare</string>

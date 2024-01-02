@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                             // EXTRA_RESULTS = cheia folosita pentru a extrage textul din intent
                             ArrayList<String> extras = data
                                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                            System.out.println("**" + extras.get(0));
+                            Toast.makeText(this, extras.get(0), Toast.LENGTH_LONG).show();
                         }
                     }
                 }

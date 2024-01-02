@@ -37,23 +37,35 @@ public class AddEntryActivity extends AppCompatActivity {
         String key = etKeyField.getText().toString();
         String value = etValueField.getText().toString();
 
+        boolean success = true;
+
         // Verifica datele introduse
-        if(key.length() <= 1) {
+        if(key.equals("")) {
             Toast.makeText(this, R.string.wrong_key_input,
                     Toast.LENGTH_SHORT).show();
+            success = false;
         }
-        if(value.length() <= 1) {
+        if(value.equals("")) {
             Toast.makeText(this, R.string.wrong_val_input,
                     Toast.LENGTH_SHORT).show();
+            success = false;
+        }
+        for(String dictKey: MainActivity.dictionary.keySet()){
+            if (key.equals(dictKey)){
+                Toast.makeText(this, R.string.key_exists,
+                        Toast.LENGTH_SHORT).show();
+                success = false;
+            }
         }
 
-        // Trimite perechea cheie, valoare catre activitatea anterioara
-        setResult(Activity.RESULT_OK, new Intent()
-                .putExtra("NEW_KEY", key)
-                .putExtra("NEW_VALUE", value));
-
-        // Revenim la activitatea anterioara
-        finish();
+        if (success) {
+            // Trimite perechea cheie, valoare catre activitatea anterioara
+            setResult(Activity.RESULT_OK, new Intent()
+                    .putExtra("NEW_KEY", key)
+                    .putExtra("NEW_VALUE", value));
+            // Revenim la activitatea anterioara
+            finish();
+        }
     }
 
     public void onButtonDiscardClick(MenuItem menuItem){
