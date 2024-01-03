@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
@@ -30,7 +30,7 @@ public class PhoneticsAdapter extends ArrayAdapter {
         }
 
         TextView tv = view.findViewById(R.id.id_tv_phonetic);
-        Button btn = view.findViewById(R.id.id_btn_listen);
+        ImageButton btn = view.findViewById(R.id.id_btn_listen);
 
         // Get the current item from the data set
         Phonetic currentItem = (Phonetic) getItem(position);
